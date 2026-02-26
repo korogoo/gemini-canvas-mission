@@ -1,4 +1,4 @@
-## 앱 이름: 우테코 회고 자동 작성기 (Wooteco Reflection Generator)
+## 앱 이름: 우테코 회고 자동 작성기 (Review Writer)
 
 ## 카테고리: 페어 프롬프트 릴레이
 
