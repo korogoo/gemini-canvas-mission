@@ -6,16 +6,15 @@
     <title>정신체리 - Mind Cherry</title>
     <style>
         :root {
-            /* 우드 톤 & 고즈넉한 테마 컬러 */
-            --bg-color: #f4f1ea; /* 부드러운 한지/모래색 */
-            --card-bg: #fffdf9; /* 밝은 크림색 */
-            --text-main: #3e2723; /* 진한 커피색 */
-            --text-dim: #795548; /* 연한 브라운 */
-            --accent-fact: #a64452; /* 체리색 (비평 지적 구간) */
-            --accent-insight: #6d8264; /* 평온한 녹색 (긍정적 성찰 구간) */
-            --accent-critique: #b08968; /* 따뜻한 나무색 */
-            --accent-interview: #5d4037; /* 짙은 나무색 */
-            --border-color: #d7ccc8; /* 연한 점토색 */
+            --bg-color: #f4f1ea;
+            --card-bg: #fffdf9;
+            --text-main: #3e2723;
+            --text-dim: #795548;
+            --accent-fact: #a64452; /* 체리색 */
+            --accent-insight: #6d8264;
+            --accent-critique: #b08968;
+            --accent-interview: #5d4037;
+            --border-color: #d7ccc8;
             --shadow-lg: 0 10px 25px -5px rgba(62, 39, 35, 0.1), 0 8px 10px -6px rgba(62, 39, 35, 0.1);
         }
 
@@ -40,7 +39,6 @@
             box-sizing: border-box;
         }
 
-        /* Views */
         .view-section {
             display: none;
             opacity: 0;
@@ -53,10 +51,7 @@
             transform: translateY(0);
         }
 
-        /* 1. Input View */
-        #input-view {
-            text-align: center;
-        }
+        #input-view { text-align: center; }
 
         .hero-title {
             font-size: 3.5rem;
@@ -120,7 +115,6 @@
             transform: translateY(-2px);
         }
 
-        /* 2. Analysis View */
         .gauge-area {
             margin-bottom: 50px;
             text-align: center;
@@ -165,8 +159,8 @@
 
         .critique-text {
             font-size: 1.25rem;
-            line-height: 2.2;
-            letter-spacing: 0.08em;
+            line-height: 2.3; /* 행간 확장 */
+            letter-spacing: 0.1em; /* 자간 확장 */
             color: var(--text-main);
             white-space: pre-wrap;
         }
@@ -177,17 +171,15 @@
             color: var(--text-main);
         }
 
-        /* 비평 지적 구간 스타일 */
         .critique-point {
             text-decoration: underline wavy var(--accent-fact);
-            background-color: rgba(166, 68, 82, 0.12); /* 더 짙은 체리색 배경 */
+            background-color: rgba(166, 68, 82, 0.12);
             padding: 2px 0;
             cursor: pointer;
         }
         .insight-sentence { background: rgba(109, 130, 100, 0.15); border-bottom: 2px solid var(--accent-insight); }
         .general-fact { color: var(--text-dim); opacity: 0.6; }
 
-        /* 3. Interview View */
         .interview-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -232,9 +224,13 @@
             box-sizing: border-box;
         }
 
-        .interview-a:focus {
-            border-color: var(--accent-fact);
-            background: #fff;
+        /* 에러 메시지 스타일 */
+        .error-message {
+            color: var(--accent-fact);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            font-weight: 700;
+            display: none;
         }
 
         .btn-action {
@@ -261,7 +257,6 @@
             display: inline-block;
         }
 
-        /* 4. Final View */
         .summary-box {
             background: var(--card-bg);
             border: 1px solid var(--accent-insight);
@@ -284,7 +279,7 @@
         .summary-content {
             padding-left: 24px;
             border-left: 2px solid var(--border-color);
-            line-height: 2.2;
+            line-height: 2.2; /* 가독성 강화 */
             color: var(--text-main);
             font-size: 1.2rem;
             white-space: pre-wrap;
@@ -301,7 +296,6 @@
             font-weight: 900;
         }
 
-        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -331,6 +325,22 @@
             40%, 80% { transform: translateX(5px); }
         }
 
+        /* 하단 메시지 안내용 (토스트 메시지 대체) */
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-interview);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 10001;
+        }
+
     </style>
 </head>
 <body>
@@ -340,9 +350,10 @@
     <h2 id="loading-text" style="color: var(--text-main); font-weight: 900;">당신의 문맥을 깊이 있게 분석 중...</h2>
 </div>
 
+<div id="copy-toast" class="copy-toast">복사가 완료되었습니다.</div>
+
 <div class="app-container">
 
-    <!-- 1. Input Section -->
     <section id="input-view" class="view-section active" style="display: block;">
         <h1 class="hero-title">정신체리 🍒</h1>
         <p class="hero-desc">안일한 회고를 상큼하게 깨워주는 성찰 공간</p>
@@ -352,7 +363,6 @@
         </div>
     </section>
 
-    <!-- 2. Analysis Result Section -->
     <section id="analysis-view" class="view-section">
         <div class="gauge-area">
             <h2 style="margin:0; font-size: 1rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.2em;">성찰 지수 판독</h2>
@@ -376,19 +386,18 @@
         <button id="btn-start-interview" type="button" class="btn-action btn-interview-start">5단계 심층 인터뷰로 들어가기</button>
     </section>
 
-    <!-- 3. Interview View -->
     <section id="interview-view" class="view-section">
         <div id="interview-card" class="interview-box">
             <div id="step-tag" class="step-tag">STEP 1 / 5</div>
             <div id="interview-question" class="interview-q"></div>
             <textarea id="interview-answer" class="interview-a" placeholder="당신의 깊이를 이곳에 담아주세요."></textarea>
+            <div id="interview-error" class="error-message">그렇게 안일하게 대답하면 정신 못 체립니다. 더 구체적으로 쓰세요.</div>
             <div>
                 <button id="btn-next-step" type="button" class="btn-action btn-next">다음 질문</button>
             </div>
         </div>
     </section>
 
-    <!-- 4. Final Summary Section -->
     <section id="final-view" class="view-section">
         <div class="summary-box">
             <h2 style="text-align:center; margin-top:0; color: var(--text-main); font-weight: 900; font-size: 2.2rem; margin-bottom: 60px;">🏆 정신체리 성찰 리포트</h2>
@@ -418,6 +427,8 @@
     const apiKey = "";
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
+    const interviewError = document.getElementById('interview-error');
+    const copyToast = document.getElementById('copy-toast');
 
     const views = {
         input: document.getElementById('input-view'),
@@ -454,6 +465,14 @@
             target.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 50);
+    }
+
+    function showToast(message) {
+        copyToast.innerText = message;
+        copyToast.style.display = 'block';
+        setTimeout(() => {
+            copyToast.style.display = 'none';
+        }, 3000);
     }
 
     function parseAIResponse(text) {
@@ -547,7 +566,7 @@
             switchView('analysis');
         } catch (err) {
             console.error(err);
-            alert("분석 중 오류가 발생했습니다: " + err.message);
+            showToast("분석 중 오류가 발생했습니다.");
         } finally {
             loadingOverlay.style.display = 'none';
         }
@@ -565,6 +584,7 @@
         stepTag.innerText = `STEP ${currentStep + 1} / 5`;
         interviewQuestion.innerText = interviewQs[currentStep] || "준비된 질문이 없습니다.";
         interviewAnswer.value = "";
+        interviewError.style.display = 'none'; // 에러 초기화
 
         if (currentStep === 4) {
             btnNextStep.innerText = "제출";
@@ -581,10 +601,14 @@
     btnNextStep.addEventListener('click', async (e) => {
         e.preventDefault();
         const ans = interviewAnswer.value.trim();
+
         if (ans.length < 10) {
-            alert("그렇게 안일하게 대답하면 정신 못 체립니다. 더 구체적으로 쓰세요.");
+            // alert 대신 화면에 에러 표시
+            interviewError.style.display = 'block';
             return;
         }
+
+        interviewError.style.display = 'none';
         interviewAs.push(ans);
 
         if (currentStep < 4) {
@@ -635,7 +659,7 @@
             switchView('final');
         } catch (err) {
             console.error(err);
-            alert("최종 리포트 생성 중 오류가 발생했습니다.");
+            showToast("리포트 생성 중 오류가 발생했습니다.");
         } finally {
             loadingOverlay.style.display = 'none';
         }
@@ -655,8 +679,10 @@
         el.select();
         try {
             document.execCommand('copy');
-            alert("최종 리포트가 복사되었습니다.");
-        } catch (err) { console.error('복사 실패', err); }
+            showToast("최종 리포트가 복사되었습니다.");
+        } catch (err) {
+            console.error('복사 실패', err);
+        }
         document.body.removeChild(el);
     });
 </script>
