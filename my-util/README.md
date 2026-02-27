@@ -5,7 +5,7 @@
 ## 카테고리: 유틸리티 앱
 
 ### 배포 링크
-https://gemini.google.com/share/0f8461eb4f76
+https://gemini.google.com/share/170974c9f846
 
 <br/>
 

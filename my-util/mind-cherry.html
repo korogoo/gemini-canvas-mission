@@ -236,7 +236,6 @@
             background: #fff;
         }
 
-        /* 에러 메시지 스타일 */
         .error-message {
             color: var(--accent-fact);
             font-size: 0.9rem;
@@ -272,7 +271,7 @@
         /* 4. Final View */
         .summary-box {
             background: var(--card-bg);
-            border: 1px solid var(--accent-insight);
+            border: 1px solid var(--border-color);
             padding: 60px 40px;
             border-radius: 12px;
             box-shadow: var(--shadow-lg);
@@ -531,6 +530,7 @@
             너는 우테코 8기 시니어 코치이자, 안일한 크루들의 정신을 체리처럼 상큼하게(?) 깨워주는 독설가 '정신체리'다.
             다음 회고록의 맥락을 분석하라.
             1. overall_critique: 개발자로서의 관점에서 작성자의 안일함을 친한 친구처럼 뼈 때리는 날카로운 팩폭으로 지적하라 (15~20줄 내외). 문장별 줄바꿈을 통해 가독성을 높여라. "정신체리"라는 정체성에 어울리게 말하라.
+               중요: 비평의 마지막 부분에는 작성자가 이 회고에서 보여준 긍정적인 면이나 잘한 점을 반드시 한두 줄 포함하여 따뜻한 칭찬으로 마무리하라.
             2. analysis: 문맥을 분석하여 비평(overall_critique)에서 구체적으로 지적하거나 비판한 문장은 CRITIQUE_POINT로 분류하라. 이미 성찰이 담긴 문장은 INSIGHT로, 그 외 일반적인 사실은 GENERAL_FACT로 분류하라.
             3. refinement_questions: 성찰을 완성할 5개의 심층 질문. (문맥 기반)
 
@@ -559,19 +559,19 @@
             interviewQs = result.refinement_questions || [];
             overallCritique.innerText = result.overall_critique || "";
             let html = "";
-            let critique = 0, insight = 0;
+            let critiqueCount = 0, insightCount = 0;
             result.analysis.forEach(item => {
                 const sentence = item.sentence || "";
                 if (item.type === "CRITIQUE_POINT") {
-                    critique++; html += `<span class="critique-point">${sentence}</span> `;
+                    critiqueCount++; html += `<span class="critique-point">${sentence}</span> `;
                 } else if (item.type === "INSIGHT") {
-                    insight++; html += `<span class="insight-sentence">${sentence}</span> `;
+                    insightCount++; html += `<span class="insight-sentence">${sentence}</span> `;
                 } else {
                     html += `<span class="general-fact">${sentence}</span> `;
                 }
             });
             sentenceDisplay.innerHTML = html;
-            const score = (critique + insight) > 0 ? Math.round((insight / (critique + insight)) * 100) : 0;
+            const score = (critiqueCount + insightCount) > 0 ? Math.round((insightCount / (critiqueCount + insightCount)) * 100) : 0;
             progressFill.style.width = score + "%";
             statusText.innerText = score < 50 ? "아직 정신 못 차렸군요. 체리색 문장들을 확인하세요." : "고민의 흔적이 느껴집니다. 마지막 관문을 통과해볼까요?";
             switchView('analysis');
